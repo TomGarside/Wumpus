@@ -6,6 +6,8 @@
        01 FLAGS.
           05 FIRST-RAND                         PIC 9(1) VALUE 0.
           05 GAMEOVER                           PIC 9(1) VALUE 0.
+          05 ARROW-HIT                          PIC 9(1) VALUE 0.
+       01 ARROW-ROOM-COUNT                      PIC 9(1) VALUE 1.
        01 CURRENT-TIME                          PIC 9(18) VALUE 0.
        01 NUM                                   PIC 9(2) VALUE 5.
        01 SEED                                  PIC 9(2) VALUE 0.
@@ -27,6 +29,13 @@
           05 COM                                PIC X(20) VALUE SPACES.
           05 ARROW-ROOM OCCURS 5 TIMES.
               10 AROOM                          PIC 9(02) VALUE 0.
+       01 MESSAGES.
+          05 ARROW-MESAGE                       PIC X(47) VALUE
+                       "CRUNCH THE ARROW HITS A CAVE WALL AND SNAPS!".
+          05 KILLED-WUMPUS-MESSAGE              PIC X(21) VALUE
+                       "YOU KILLED THE WUMPUS".
+          05 BAT-GRAB-MESSAGE                   PIC X(28) VALUE
+                       "OH NO GRABBED BY A SUPER BAT".
 
        PROCEDURE DIVISION.
 
@@ -93,7 +102,7 @@
        P-400-GAME-LOOP.
 
         IF BAT(CURRENT-ROOM) EQUAL 1 THEN
-            DISPLAY 'OH NO GRABBED BY A SUPER BAT'
+            DISPLAY BAT-GRAB-MESSAGE
             PERFORM P-300-GEN-RANDNO
             MOVE NUM TO CURRENT-ROOM
         END-IF
@@ -159,6 +168,7 @@
                       DISPLAY "TWAAANG"
                       UNSTRING USER-INPUT DELIMITED BY SPACES INTO COM,
                       AROOM(1), AROOM(2), AROOM(3), AROOM(4), AROOM(5)
+                      COMPUTE ARROWS = ARROWS - 1
                       PERFORM P-700-SHOOT-ARROW THRU P-799-EXIT
                   WHEN "QUIT"
                       GOBACK
@@ -180,76 +190,33 @@
         EXIT.
 
        P-700-SHOOT-ARROW.
-          COMPUTE ARROWS = ARROWS - 1
 
-          IF AROOM(1) EQUALS PASSAGE1(CURRENT-ROOM) OR
-                            PASSAGE2(CURRENT-ROOM) OR
-                            PASSAGE3(CURRENT-ROOM) THEN
-            IF WUMPUS(AROOM(1)) EQUALS 1 THEN
-                DISPLAY "YOU KILLED THE WUMPUS"
-                MOVE 1 TO GAMEOVER
-            END-IF
-          ELSE
-             DISPLAY "CRUNCH THE ARROW HITS A CAVE WALL AND SNAPS!"
-             NEXT SENTENCE
-          END-IF
+          PERFORM UNTIL ARROW-HIT EQUAL 1
+             IF AROOM(ARROW-ROOM-COUNT) EQUALS PASSAGE1(CURRENT-ROOM) OR
+                                PASSAGE2(CURRENT-ROOM) OR
+                                PASSAGE3(CURRENT-ROOM) THEN
+                IF WUMPUS(AROOM(ARROW-ROOM-COUNT)) EQUALS 1 THEN
+                    DISPLAY KILLED-WUMPUS-MESSAGE
+                    MOVE 1 TO GAMEOVER
+                    MOVE 1 TO ARROW-HIT
+                END-IF
+                COMPUTE ARROW-ROOM-COUNT = ARROW-ROOM-COUNT + 1
+              ELSE
+                 DISPLAY ARROW-MESAGE
+                 MOVE 1 TO ARROW-HIT
+                 PERFORM P-300-GEN-RANDNO
+                 IF NUM < 15 THEN
+                   DISPLAY "YOU WOKE THE WUMPUS"
+                   MOVE ZERO TO WUMPUS(WUMPUS-ROOM)
+                   PERFORM P-300-GEN-RANDNO
+                   MOVE 1 TO WUMPUS(NUM)
+                   MOVE NUM TO WUMPUS-ROOM
+                 END-IF
+              END-IF
+          END-PERFORM
+          INITIALIZE ARROW-HIT
 
-          IF AROOM(2) EQUALS PASSAGE1(AROOM(1)) OR
-                             PASSAGE2(AROOM(1)) OR
-                             PASSAGE3(AROOM(1)) THEN
-            IF WUMPUS(AROOM(2)) EQUALS 1 THEN
-                 DISPLAY "YOU KILLED THE WUMPUS"
-                 MOVE 1 TO GAMEOVER
-            END-IF
-          ELSE
-             DISPLAY "CRUNCH THE ARROW HITS A CAVE WALL AND SNAPS!"
-             NEXT SENTENCE
-          END-IF
 
-          IF AROOM(3) EQUALS PASSAGE1(AROOM(2)) OR
-                              PASSAGE2(AROOM(2)) OR
-                              PASSAGE3(AROOM(2)) THEN
-             IF WUMPUS(AROOM(3)) EQUALS 1 THEN
-                DISPLAY "YOU KILLED THE WUMPUS"
-                MOVE 1 TO GAMEOVER
-            END-IF
-          ELSE
-                DISPLAY "CRUNCH THE ARROW HITS A CAVE WALL AND SNAPS!"
-                NEXT SENTENCE
-          END-IF
-
-          IF AROOM(4) EQUALS PASSAGE1(AROOM(3)) OR
-                              PASSAGE2(AROOM(3)) OR
-                              PASSAGE3(AROOM(3)) THEN
-            IF WUMPUS(AROOM(4)) EQUALS 1 THEN
-                DISPLAY "YOU KILLED THE WUMPUS"
-                MOVE 1 TO GAMEOVER
-            END-IF
-          ELSE
-            DISPLAY "CRUNCH THE ARROW HITS A CAVE WALL AND SNAPS!"
-            NEXT SENTENCE
-          END-IF
-
-          IF AROOM(5) EQUALS PASSAGE1(AROOM(4)) OR
-                                PASSAGE2(AROOM(4)) OR
-                                PASSAGE3(AROOM(4)) THEN
-            IF WUMPUS(AROOM(5)) EQUALS 1 THEN
-                  DISPLAY "YOU KILLED THE WUMPUS"
-                  MOVE 1 TO GAMEOVER
-            END-IF
-          ELSE
-            DISPLAY "CRUNCH THE ARROW HITS A CAVE WALL AND SNAPS"
-            NEXT SENTENCE
-          END-IF.
-
-          PERFORM P-300-GEN-RANDNO
-          IF NUM < 15 THEN
-            DISPLAY "YOU WOKE THE WUMPUS"
-            MOVE ZERO TO WUMPUS(WUMPUS-ROOM)
-            PERFORM P-300-GEN-RANDNO
-            MOVE 1 TO WUMPUS(NUM)
-            MOVE NUM TO WUMPUS-ROOM
-          END-IF
 
           IF ARROWS EQUAL ZERO THEN
             DISPLAY "UH OH OUT OF ARROWS"
@@ -258,3 +225,9 @@
 
        P-799-EXIT.
         EXIT.
+
+       P-800-DISPLAY-WUMPUS.
+
+
+       P-899-EXIT.
+         EXIT.
