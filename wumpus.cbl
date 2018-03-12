@@ -7,6 +7,7 @@
           05 FIRST-RAND                         PIC 9(1) VALUE 0.
           05 GAMEOVER                           PIC 9(1) VALUE 0.
           05 ARROW-HIT                          PIC 9(1) VALUE 0.
+       01 ARROW-RM                              PIC 9(1) VALUE 1.
        01 ARROW-ROOM-COUNT                      PIC 9(1) VALUE 1.
        01 CURRENT-TIME                          PIC 9(18) VALUE 0.
        01 NUM                                   PIC 9(2) VALUE 5.
@@ -17,7 +18,7 @@
           05 ARROWS                             PIC 9(1) VALUE 5.
           05 CURRENT-ROOM                       PIC 9(2) VALUE 3.
        01 ROOMS.
-          05 WUMPUS-ROOM                        PIC 9(2)  VALUE ZERO.
+          05 WUMPUS-ROOM                        PIC 9(2)  VALUE 0.
           05 ROOM  OCCURS 20 TIMES.
               10   PASSAGE1                     PIC 9(02) VALUE 0.
               10   PASSAGE2                     PIC 9(02) VALUE 0.
@@ -69,8 +70,10 @@
        MOVE 141820000 TO ROOM(19)
        MOVE 151619000 TO ROOM(20)
 
+
        PERFORM P-300-GEN-RANDNO
        MOVE 1 TO WUMPUS (NUM)
+       MOVE NUM TO WUMPUS-ROOM
 
        PERFORM P-300-GEN-RANDNO
        MOVE 1 TO BAT (NUM)
@@ -180,6 +183,8 @@
                                11__12__13__14__15__
                               __\___\___\___\___\__
                               <-16--17--18--19--20-> "
+                  WHEN "CHEA"
+                        DISPLAY WUMPUS-ROOM
                   WHEN OTHER
                       DISPLAY "IM SORRY I DONT UNDERSTAND"
                       DISPLAY "TRY GO 1,2 OR 3"
@@ -190,33 +195,34 @@
         EXIT.
 
        P-700-SHOOT-ARROW.
+           MOVE CURRENT-ROOM TO ARROW-RM
 
           PERFORM UNTIL ARROW-HIT EQUAL 1
-             IF AROOM(ARROW-ROOM-COUNT) EQUALS PASSAGE1(CURRENT-ROOM) OR
-                                PASSAGE2(CURRENT-ROOM) OR
-                                PASSAGE3(CURRENT-ROOM) THEN
+             DISPLAY ARROW-RM
+             IF AROOM(ARROW-ROOM-COUNT) EQUALS PASSAGE1(ARROW-RM) OR
+                                PASSAGE2(ARROW-RM) OR
+                                PASSAGE3(ARROW-RM) THEN
                 IF WUMPUS(AROOM(ARROW-ROOM-COUNT)) EQUALS 1 THEN
                     DISPLAY KILLED-WUMPUS-MESSAGE
                     MOVE 1 TO GAMEOVER
                     MOVE 1 TO ARROW-HIT
                 END-IF
+                MOVE AROOM(ARROW-ROOM-COUNT) TO ARROW-RM
                 COMPUTE ARROW-ROOM-COUNT = ARROW-ROOM-COUNT + 1
-              ELSE
+             ELSE
                  DISPLAY ARROW-MESAGE
                  MOVE 1 TO ARROW-HIT
                  PERFORM P-300-GEN-RANDNO
                  IF NUM < 15 THEN
                    DISPLAY "YOU WOKE THE WUMPUS"
-                   MOVE ZERO TO WUMPUS(WUMPUS-ROOM)
+                   MOVE 0 TO WUMPUS (WUMPUS-ROOM)
                    PERFORM P-300-GEN-RANDNO
-                   MOVE 1 TO WUMPUS(NUM)
+                   MOVE 1 TO WUMPUS (NUM)
                    MOVE NUM TO WUMPUS-ROOM
                  END-IF
               END-IF
           END-PERFORM
           INITIALIZE ARROW-HIT
-
-
 
           IF ARROWS EQUAL ZERO THEN
             DISPLAY "UH OH OUT OF ARROWS"
