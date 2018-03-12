@@ -111,7 +111,7 @@
         END-IF
 
         IF WUMPUS(CURRENT-ROOM) EQUAL 1 THEN
-            DISPLAY 'YOU ARE DEVOURED BY THE WUMPUS'
+            PERFORM P-800-DISPLAY-WUMPUS
             MOVE 1 TO GAMEOVER
             NEXT SENTENCE
         END-IF
@@ -233,6 +233,31 @@
         EXIT.
 
        P-800-DISPLAY-WUMPUS.
+
+
+
+            DISPLAY"                          ####                     "
+            DISPLAY"                         #    #                    "
+            DISPLAY"                        #  ..  #                   "
+            DISPLAY"                       #  .  .  #                  "
+            DISPLAY"                      #  . 00 .  #                 "
+            DISPLAY"                      #  . 00 .  #                 "
+            DISPLAY"                  ####    .  .    ####             "
+            DISPLAY"                 #         ..         #            "
+            DISPLAY"                #                      #           "
+            DISPLAY"               #         vvvvvv         #          "
+            DISPLAY"              #   #     v      v     #   #         "
+            DISPLAY"              #  # #   >        <   # #  #         "
+            DISPLAY"              #  #  #   ^      ^   #  #  #         "
+            DISPLAY"              #  #   #   ^^^^^^   #   #  #         "
+            DISPLAY"              #  #    #          #    #  #         "
+            DISPLAY"              #  #     #        #     #  #         "
+            DISPLAY"              #  #      #      #      #  #         "
+            DISPLAY"              #  #       ##  ##       #  #         "
+            DISPLAY"              #  #         ##         #  #         "
+            DISPLAY"             (----)                  (----)        "
+            DISPLAY"            (------)                (------)       "
+            DISPLAY"             YOU ARE DEVOURED BY THE WUMPUS       ".
 
 
        P-899-EXIT.
