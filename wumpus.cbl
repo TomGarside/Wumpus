@@ -190,7 +190,7 @@
                 MOVE 1 TO GAMEOVER
             END-IF
           ELSE
-             DISPLAY "CRUNCH THE ARROW HITS A CAVE WALL AND SNAPS!1"
+             DISPLAY "CRUNCH THE ARROW HITS A CAVE WALL AND SNAPS!"
              NEXT SENTENCE
           END-IF
 
@@ -202,7 +202,7 @@
                  MOVE 1 TO GAMEOVER
             END-IF
           ELSE
-             DISPLAY "CRUNCH THE ARROW HITS A CAVE WALL AND SNAPS2"
+             DISPLAY "CRUNCH THE ARROW HITS A CAVE WALL AND SNAPS!"
              NEXT SENTENCE
           END-IF
 
@@ -214,7 +214,7 @@
                 MOVE 1 TO GAMEOVER
             END-IF
           ELSE
-                DISPLAY "CRUNCH THE ARROW HITS A CAVE WALL AND SNAPS3"
+                DISPLAY "CRUNCH THE ARROW HITS A CAVE WALL AND SNAPS!"
                 NEXT SENTENCE
           END-IF
 
@@ -226,7 +226,7 @@
                 MOVE 1 TO GAMEOVER
             END-IF
           ELSE
-            DISPLAY "CRUNCH THE ARROW HITS A CAVE WALL AND SNAPS4"
+            DISPLAY "CRUNCH THE ARROW HITS A CAVE WALL AND SNAPS!"
             NEXT SENTENCE
           END-IF
 
@@ -238,7 +238,7 @@
                   MOVE 1 TO GAMEOVER
             END-IF
           ELSE
-            DISPLAY "CRUNCH THE ARROW HITS A CAVE WALL AND SNAPS5"
+            DISPLAY "CRUNCH THE ARROW HITS A CAVE WALL AND SNAPS"
             NEXT SENTENCE
           END-IF.
 
