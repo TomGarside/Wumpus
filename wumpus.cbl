@@ -16,7 +16,7 @@
 
        01 ADVENTURER.
           05 ARROWS                             PIC 9(1) VALUE 5.
-          05 CURRENT-ROOM                       PIC 9(2) VALUE 3.
+          05 CURRENT-ROOM                       PIC 9(2) VALUE 1.
        01 ROOMS.
           05 WUMPUS-ROOM                        PIC 9(2)  VALUE 0.
           05 ROOM  OCCURS 20 TIMES.
@@ -95,10 +95,12 @@
             ACCEPT CURRENT-TIME FROM TIME
             MOVE CURRENT-TIME(16:2) TO SEED
             COMPUTE NUM = FUNCTION RANDOM(SEED) * 20 + 1
+            COMPUTE NUM = FUNCTION RANDOM * 20 + 1
             MOVE 1 TO FIRST-RAND
           ELSE
             COMPUTE NUM = FUNCTION RANDOM * 20 + 1
           END-IF.
+          DISPLAY NUM.
        P-300-EXIT.
           EXIT.
 
