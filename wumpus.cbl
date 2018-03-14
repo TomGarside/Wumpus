@@ -99,7 +99,6 @@
           ELSE
             COMPUTE NUM = FUNCTION RANDOM * 20 + 1
           END-IF.
-          DISPLAY NUM.
        P-300-EXIT.
           EXIT.
 
@@ -267,19 +266,27 @@
        P-900-DISPLAY-BATS.
 
             DISPLAY"                                                   "
-            DISPLAY"             ^ w ^                                 "
-            DISPLAY"            / \#/ \                  ^ w ^         "
-            DISPLAY"              /v\                   / \#/ \        "
-            DISPLAY"                       ^ w ^          /v\          "
-            DISPLAY"                      / \#/ \                      "
-            DISPLAY"                        /v\                        "
             DISPLAY"                                                   "
-            DISPLAY"                            ^ w ^                  "
-            DISPLAY"                           / \#/ \                 "
-            DISPLAY"            ^ w ^            /v\                   "
+            DISPLAY"                     ^ w ^                         "
+            DISPLAY"                    / \#/ \          ^ w ^         "
+            DISPLAY"                      /v\           / \#/ \        "
+            DISPLAY"    ^ w ^                             /v\          "
+            DISPLAY"   / \#/ \                                         "
+            DISPLAY"     /v\                                           "
+            DISPLAY"                                                   "
+            DISPLAY"                                ^ w ^              "
+            DISPLAY"                               / \#/ \             "
+            DISPLAY"            ^ w ^                /v\               "
             DISPLAY"           / \#/ \                                 "
             DISPLAY"             /v\                                   "
-            DISPLAY"             OH NO GRABBED BY SUPER BATS!!        ".
+            DISPLAY"                                   ^ w ^           "
+            DISPLAY"                                  / \#/ \          "
+            DISPLAY"     ^ w ^                          /v\            "
+            DISPLAY"    / \#/ \                                        "
+            DISPLAY"      /v\                                          "
+            DISPLAY"                                                   "
+            DISPLAY"                                                   "
+            DISPLAY"             OH NO GRABBED BY SUPER BATS          ".
 
 
        P-999-EXIT.
