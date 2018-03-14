@@ -35,8 +35,7 @@
                        "CRUNCH THE ARROW HITS A CAVE WALL AND SNAPS!".
           05 KILLED-WUMPUS-MESSAGE              PIC X(21) VALUE
                        "YOU KILLED THE WUMPUS".
-          05 BAT-GRAB-MESSAGE                   PIC X(28) VALUE
-                       "OH NO GRABBED BY A SUPER BAT".
+
 
        PROCEDURE DIVISION.
 
@@ -107,7 +106,7 @@
        P-400-GAME-LOOP.
 
         IF BAT(CURRENT-ROOM) EQUAL 1 THEN
-            DISPLAY BAT-GRAB-MESSAGE
+            PERFORM P-900-DISPLAY-BATS
             PERFORM P-300-GEN-RANDNO
             MOVE NUM TO CURRENT-ROOM
         END-IF
@@ -264,3 +263,24 @@
 
        P-899-EXIT.
          EXIT.
+
+       P-900-DISPLAY-BATS.
+
+            DISPLAY"                                                   "
+            DISPLAY"             ^ w ^                                 "
+            DISPLAY"            / \#/ \                  ^ w ^         "
+            DISPLAY"              /v\                   / \#/ \        "
+            DISPLAY"                       ^ w ^          /v\          "
+            DISPLAY"                      / \#/ \                      "
+            DISPLAY"                        /v\                        "
+            DISPLAY"                                                   "
+            DISPLAY"                            ^ w ^                  "
+            DISPLAY"                           / \#/ \                 "
+            DISPLAY"            ^ w ^            /v\                   "
+            DISPLAY"           / \#/ \                                 "
+            DISPLAY"             /v\                                   "
+            DISPLAY"             OH NO GRABBED BY SUPER BATS!!        ".
+
+
+       P-999-EXIT.
+           EXIT.
