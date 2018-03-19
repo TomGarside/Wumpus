@@ -117,7 +117,7 @@
         END-IF
 
         IF PIT(CURRENT-ROOM) EQUAL 1 THEN
-            DISPLAY 'YOU STUMBLE DOWN A BOTTOMLESS PIT'
+            PERFORM P-1000-DISPLAY-PIT
             MOVE 1 TO GAMEOVER
             NEXT SENTENCE
         END-IF
@@ -290,4 +290,31 @@
 
 
        P-999-EXIT.
+           EXIT.
+
+       P-1000-DISPLAY-PIT.
+            DISPLAY"    |    |        | |              |||    | |  |   "
+            DISPLAY"     |  |          |                |      || |    "
+            DISPLAY"      | |          |                        |      "
+            DISPLAY"       |                                    |      "
+            DISPLAY"       |                  ########                 "
+            DISPLAY"                       ##        ##                "
+            DISPLAY"                   ###             ###             "
+            DISPLAY"               ###                     ##          "
+            DISPLAY"             ##                           ##       "
+            DISPLAY"            #                               #      "
+            DISPLAY"           ##                             ##       "
+            DISPLAY"             ##                        ###         "
+            DISPLAY"               ##                   ###            "
+            DISPLAY"                  ##            ####               "
+            DISPLAY"                   ###       ###                   "
+            DISPLAY"                       ######                 |    "
+            DISPLAY"  |                                           ||   "
+            DISPLAY"  ||                                          ||   "
+            DISPLAY"  | |  ||                                     | |  "
+            DISPLAY"  | | |  |                        |         |   |  "
+            DISPLAY"  | ||    |                       |   |    |    |  "
+            DISPLAY"  | |        |                   ||  | |  |     |  "
+            DISPLAY"          'YOU STUMBLE DOWN A BOTTOMLESS PIT'     ".
+       P-1099-EXIT.
            EXIT.
