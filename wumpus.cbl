@@ -40,7 +40,7 @@
        PROCEDURE DIVISION.
 
        P-100-MAIN.
-           PERFORM P-500-PRINT-INTRO THRU P-599-EXIT.
+           PERFORM P-1200-PRINT-INTRO THRU P-1299-EXIT.
            PERFORM P-200-GEN-CAVE THRU P-200-EXIT.
            PERFORM P-400-GAME-LOOP UNTIL GAMEOVER=1
            GOBACK.
@@ -148,12 +148,6 @@
         END-IF.
 
        P-499-EXIT.
-          EXIT.
-
-       P-500-PRINT-INTRO.
-        DISPLAY "INTRO PLACE HOLDER".
-
-       P-599-EXIT.
           EXIT.
 
        P-600-ACCEPT-COMMAND.
@@ -315,6 +309,15 @@
             DISPLAY"  | | |  |                        |         |   |  "
             DISPLAY"  | ||    |                       |   |    |    |  "
             DISPLAY"  | |        |                   ||  | |  |     |  "
-            DISPLAY"          'YOU STUMBLE DOWN A BOTTOMLESS PIT'     ".
+            DISPLAY"          YOU STUMBLE DOWN A BOTTOMLESS PIT       ".
        P-1099-EXIT.
+           EXIT.
+
+       P-1200-PRINT-INTRO.
+           DISPLAY "          WELCOME TO HUNT THE WUMPUS               "
+           DISPLAY "YOU MUST FIND THE WUMPUS IN HIS DARK AND DANGEROUS"
+           DISPLAY "LAIR. YOU ARE EQUIPED WITH FIVE ARROWS, YOUR BOW IS"
+           DISPLAY "STRONG ENOUGH TO HIT THE WUMPUS FIVE ROOMS AWAY.  ".
+
+       P-1299-EXIT.
            EXIT.
