@@ -4,19 +4,19 @@
        DATA DIVISION.
        WORKING-STORAGE SECTION.
        01 FLAGS.
-          05 FIRST-RAND                         PIC 9(1) VALUE 0.
-          05 GAMEOVER                           PIC 9(1) VALUE 0.
-          05 ARROW-HIT                          PIC 9(1) VALUE 0.
-       01 ARROW-RM                              PIC 9(1) VALUE 1.
-       01 ARROW-ROOM-COUNT                      PIC 9(1) VALUE 1.
+          05 FIRST-RAND                         PIC 9(1)  VALUE 0.
+          05 GAMEOVER                           PIC 9(1)  VALUE 0.
+          05 ARROW-HIT                          PIC 9(1)  VALUE 0.
+       01 ARROW-RM                              PIC 9(1)  VALUE 1.
+       01 ARROW-ROOM-COUNT                      PIC 9(1)  VALUE 1.
        01 CURRENT-TIME                          PIC 9(18) VALUE 0.
-       01 NUM                                   PIC 9(2) VALUE 5.
-       01 SEED                                  PIC 9(2) VALUE 0.
+       01 NUM                                   PIC 9(2)  VALUE 5.
+       01 SEED                                  PIC 9(2)  VALUE 0.
        01 USER-INPUT                            PIC X(20) VALUE SPACES.
 
        01 ADVENTURER.
-          05 ARROWS                             PIC 9(1) VALUE 5.
-          05 CURRENT-ROOM                       PIC 9(2) VALUE 1.
+          05 ARROWS                             PIC 9(1)  VALUE 5.
+          05 CURRENT-ROOM                       PIC 9(2)  VALUE 1.
        01 ROOMS.
           05 WUMPUS-ROOM                        PIC 9(2)  VALUE 0.
           05 ROOM  OCCURS 20 TIMES.
@@ -40,11 +40,11 @@
        PROCEDURE DIVISION.
 
        P-100-MAIN.
-           PERFORM P-1200-PRINT-INTRO THRU P-1299-EXIT.
-           PERFORM P-200-GEN-CAVE THRU P-200-EXIT.
+           PERFORM P-1200-PRINT-INTRO THRU P-1201-EXIT.
+           PERFORM P-200-GEN-CAVE THRU P-201-EXIT.
            PERFORM P-400-GAME-LOOP UNTIL GAMEOVER=1
            GOBACK.
-       P-199-EXIT.
+       P-101-EXIT.
            EXIT.
 
        P-200-GEN-CAVE.
@@ -86,7 +86,7 @@
        PERFORM P-300-GEN-RANDNO
        MOVE 1 TO PIT (NUM).
 
-       P-200-EXIT.
+       P-201-EXIT.
           EXIT.
 
        P-300-GEN-RANDNO.
@@ -99,25 +99,25 @@
           ELSE
             COMPUTE NUM = FUNCTION RANDOM * 20 + 1
           END-IF.
-       P-300-EXIT.
+       P-301-EXIT-EXIT.
           EXIT.
 
        P-400-GAME-LOOP.
 
         IF BAT(CURRENT-ROOM) EQUAL 1 THEN
-            PERFORM P-900-DISPLAY-BATS
+            PERFORM P-1000-DISPLAY-BATS
             PERFORM P-300-GEN-RANDNO
             MOVE NUM TO CURRENT-ROOM
         END-IF
 
         IF WUMPUS(CURRENT-ROOM) EQUAL 1 THEN
-            PERFORM P-800-DISPLAY-WUMPUS
+            PERFORM P-900-DISPLAY-WUMPUS
             MOVE 1 TO GAMEOVER
             NEXT SENTENCE
         END-IF
 
         IF PIT(CURRENT-ROOM) EQUAL 1 THEN
-            PERFORM P-1000-DISPLAY-PIT
+            PERFORM P-1100-DISPLAY-PIT
             MOVE 1 TO GAMEOVER
             NEXT SENTENCE
         END-IF
@@ -144,10 +144,10 @@
         END-IF.
 
         IF GAMEOVER EQUAL ZERO THEN
-            PERFORM P-600-ACCEPT-COMMAND THRU P-699-EXIT
+            PERFORM P-600-ACCEPT-COMMAND THRU P-601-EXIT
         END-IF.
 
-       P-499-EXIT.
+       P-401-EXIT.
           EXIT.
 
        P-600-ACCEPT-COMMAND.
@@ -166,7 +166,7 @@
                       UNSTRING USER-INPUT DELIMITED BY SPACES INTO COM,
                       AROOM(1), AROOM(2), AROOM(3), AROOM(4), AROOM(5)
                       COMPUTE ARROWS = ARROWS - 1
-                      PERFORM P-700-SHOOT-ARROW THRU P-799-EXIT
+                      PERFORM P-700-SHOOT-ARROW THRU P-701-EXIT
                   WHEN "QUIT"
                       GOBACK
                   WHEN "PRIN"
@@ -185,7 +185,7 @@
 
          END-EVALUATE.
 
-       P-699-EXIT.
+       P-601-EXIT.
         EXIT.
 
        P-700-SHOOT-ARROW.
@@ -196,25 +196,10 @@
              IF AROOM(ARROW-ROOM-COUNT) EQUALS PASSAGE1(ARROW-RM) OR
                                 PASSAGE2(ARROW-RM) OR
                                 PASSAGE3(ARROW-RM) THEN
-                IF WUMPUS(AROOM(ARROW-ROOM-COUNT)) EQUALS 1 THEN
-                    DISPLAY KILLED-WUMPUS-MESSAGE
-                    MOVE 1 TO GAMEOVER
-                    MOVE 1 TO ARROW-HIT
-                END-IF
-                MOVE AROOM(ARROW-ROOM-COUNT) TO ARROW-RM
-                COMPUTE ARROW-ROOM-COUNT = ARROW-ROOM-COUNT + 1
+                 PERFORM P-800-CHECK-ROOM
              ELSE
-                 DISPLAY ARROW-MESAGE
-                 MOVE 1 TO ARROW-HIT
-                 PERFORM P-300-GEN-RANDNO
-                 IF NUM < 15 THEN
-                   DISPLAY "YOU WOKE THE WUMPUS"
-                   MOVE 0 TO WUMPUS (WUMPUS-ROOM)
-                   PERFORM P-300-GEN-RANDNO
-                   MOVE 1 TO WUMPUS (NUM)
-                   MOVE NUM TO WUMPUS-ROOM
-                 END-IF
-              END-IF
+                 PERFORM P-802-ARROW-MISS
+             END-IF
           END-PERFORM
           INITIALIZE ARROW-HIT
 
@@ -223,12 +208,38 @@
             MOVE 1 TO GAMEOVER
           END-IF.
 
-       P-799-EXIT.
+       P-701-EXIT.
         EXIT.
 
-       P-800-DISPLAY-WUMPUS.
+       P-800-CHECK-ROOM.
+           IF WUMPUS(AROOM(ARROW-ROOM-COUNT)) EQUALS 1 THEN
+                    DISPLAY KILLED-WUMPUS-MESSAGE
+                    MOVE 1 TO GAMEOVER
+                    MOVE 1 TO ARROW-HIT
+                END-IF
+           MOVE AROOM(ARROW-ROOM-COUNT) TO ARROW-RM
+           COMPUTE ARROW-ROOM-COUNT = ARROW-ROOM-COUNT + 1.
+
+       P-801-EXIT.
+           EXIT.
+
+       P-802-ARROW-MISS.
+            DISPLAY ARROW-MESAGE
+            MOVE 1 TO ARROW-HIT
+            PERFORM P-300-GEN-RANDNO
+            IF NUM < 15 THEN
+               DISPLAY "YOU WOKE THE WUMPUS"
+               MOVE 0 TO WUMPUS (WUMPUS-ROOM)
+               PERFORM P-300-GEN-RANDNO
+               MOVE 1 TO WUMPUS (NUM)
+               MOVE NUM TO WUMPUS-ROOM
+            END-IF.
 
 
+       P-803-EXIT.
+           EXIT.
+
+       P-900-DISPLAY-WUMPUS.
 
             DISPLAY"                          ####                     "
             DISPLAY"                         #    #                    "
@@ -254,10 +265,10 @@
             DISPLAY"             YOU ARE DEVOURED BY THE WUMPUS       ".
 
 
-       P-899-EXIT.
+       P-999-EXIT.
          EXIT.
 
-       P-900-DISPLAY-BATS.
+       P-1000-DISPLAY-BATS.
 
             DISPLAY"                                                   "
             DISPLAY"                                                   "
@@ -283,10 +294,10 @@
             DISPLAY"             OH NO GRABBED BY SUPER BATS          ".
 
 
-       P-999-EXIT.
+       P-1001-EXIT.
            EXIT.
 
-       P-1000-DISPLAY-PIT.
+       P-1100-DISPLAY-PIT.
             DISPLAY"    |    |        | |              |||    | |  |   "
             DISPLAY"     |  |          |                |      || |    "
             DISPLAY"      | |          |                        |      "
@@ -310,7 +321,7 @@
             DISPLAY"  | ||    |                       |   |    |    |  "
             DISPLAY"  | |        |                   ||  | |  |     |  "
             DISPLAY"          YOU STUMBLE DOWN A BOTTOMLESS PIT       ".
-       P-1099-EXIT.
+       P-1101-EXIT.
            EXIT.
 
        P-1200-PRINT-INTRO.
@@ -319,5 +330,5 @@
            DISPLAY "LAIR. YOU ARE EQUIPED WITH FIVE ARROWS, YOUR BOW IS"
            DISPLAY "STRONG ENOUGH TO HIT THE WUMPUS FIVE ROOMS AWAY.  ".
 
-       P-1299-EXIT.
+       P-1201-EXIT.
            EXIT.
