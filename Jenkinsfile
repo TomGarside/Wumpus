@@ -1,3 +1,6 @@
 echo "hello world from mac"
 
-sh "cobc -x wumpus.cbl"
+
+node {
+	sh "cobc -x wumpus.cbl"
+}
